@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <!-- Configuración esencial para que se comporte y escale como app nativa -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#121212">
+    <title>Rendimientos Netos</title>
+    <style>
+        /* Variables de diseño: Interfaz oscura estilo fintech */
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary: #820ad1; 
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+            --danger: #ff453a;
+            --success: #32d74b;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 24px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 32px;
+            font-weight: 600;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            background-color: var(--card-bg);
+            border: 1px solid #333;
+            color: var(--text-main);
+            font-size: 18px;
+            padding: 16px;
+            border-radius: 12px;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.3s;
+            -webkit-appearance: none; /* Quita estilos por defecto en móviles */
+        }
+
+        input:focus {
+            border-color: var(--primary);
+        }
+
+        .results-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 32px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+
+        .result-row:last-child {
+            margin-bottom: 0;
+            padding-top: 16px;
+            border-top: 1px solid #333;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .value-gross { color: var(--text-main); }
+        .value-tax { color: var(--danger); }
+        .value-net { color: var(--success); }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <h1>Cálculo de Rendimientos</h1>
+
+    <div class="input-group">
+        <label>Capital invertido (MXN)</label>
+        <!-- Precargado con tu monto inicial -->
+        <input type="number" id="capital" value="0" step="0.01" inputmode="decimal">
+    </div>
+
+    <div class="input-group">
+        <label>Tasa de rendimiento anual (%)</label>
+        <input type="number" id="tasaRendimiento" value="15" step="0.1" inputmode="decimal">
+    </div>
+
+    <div class="input-group">
+        <label>Retención ISR anual (%)</label>
+        <input type="number" id="tasaIsr" value="0.90" step="0.01" inputmode="decimal">
+    </div>
+
+    <div class="results-card">
+        <div class="result-row">
+            <span>Ganancia Bruta</span>
+            <span class="value-gross" id="resBruta">$0.00</span>
+        </div>
+        <div class="result-row">
+            <span>Retención ISR</span>
+            <span class="value-tax" id="resIsr">-$0.00</span>
+        </div>
+        <div class="result-row">
+            <span>Ganancia Neta Diaria</span>
+            <span class="value-net" id="resNeta">$0.00</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Configuración para que la moneda se formatee correctamente en pesos
+    const formatter = new Intl.NumberFormat('es-MX', {
+        style: 'currency',
+        currency: 'MXN'
+    });
+
+    function calcularRendimientos() {
+        // 1. Obtener valores (si el campo está vacío, usamos 0 para evitar errores)
+        const capital = parseFloat(document.getElementById('capital').value) || 0;
+        const tasaRendimiento = parseFloat(document.getElementById('tasaRendimiento').value) || 0;
+        const tasaIsr = parseFloat(document.getElementById('tasaIsr').value) || 0;
+
+        // 2. Aplicar las fórmulas matemáticas exactas con 360 y 365 días
+        const gananciaBrutaDiaria = (capital * (tasaRendimiento / 100)) / 360;
+        const isrDiario = (capital * (tasaIsr / 100)) / 365;
+        const gananciaNeta = gananciaBrutaDiaria - isrDiario;
+
+        // 3. Imprimir resultados en la pantalla
+        document.getElementById('resBruta').textContent = formatter.format(gananciaBrutaDiaria);
+        document.getElementById('resIsr').textContent = "-" + formatter.format(isrDiario);
+        document.getElementById('resNeta').textContent = formatter.format(gananciaNeta);
+    }
+
+    // Ejecutar el cálculo automáticamente cada vez que se teclea un número
+    document.getElementById('capital').addEventListener('input', calcularRendimientos);
+    document.getElementById('tasaRendimiento').addEventListener('input', calcularRendimientos);
+    document.getElementById('tasaIsr').addEventListener('input', calcularRendimientos);
+
+    // Ejecutar una vez al abrir la app para mostrar los valores iniciales
+    calcularRendimientos();
+</script>
+</body>
+</html>
