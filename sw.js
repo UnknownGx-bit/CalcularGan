@@ -1,18 +1,17 @@
-const CACHE_NAME = "calculargan-v1";
+const CACHE_NAME = "calculargan-v2";
 
 const APP_FILES = [
-  "./",
-  "./index.html",
-  "./manifest.webmanifest",
-  "./icono-192.png",
-  "./icono-512.png"
+  "/CalcularGan/",
+  "/CalcularGan/index.html",
+  "/CalcularGan/manifest.json",
+  "/CalcularGan/icono-192.png",
+  "/CalcularGan/icono-512.png"
 ];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_FILES))
   );
-
   self.skipWaiting();
 });
 
@@ -26,16 +25,11 @@ self.addEventListener("activate", (event) => {
       )
     )
   );
-
   self.clients.claim();
 });
 
 self.addEventListener("fetch", (event) => {
-  if (event.request.method !== "GET") return;
-
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      return cachedResponse || fetch(event.request);
-    })
+    fetch(event.request).catch(() => caches.match(event.request))
   );
 });
