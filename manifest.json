@@ -1,0 +1,27 @@
+{
+  "id": "/CalcularGan/?app=2",
+  "name": "Calculadora de Rendimiento",
+  "short_name": "CalcularGan",
+  "description": "Calculadora de rendimiento diario neto",
+  "start_url": "/CalcularGan/?app=2",
+  "scope": "/CalcularGan/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#070b12",
+  "theme_color": "#070b12",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "/CalcularGan/icono-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/CalcularGan/icono-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
