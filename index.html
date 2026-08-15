@@ -10,7 +10,8 @@
     :root {
       color-scheme: dark;
       --bg: #070b12;
-      --panel: rgba(18, 24, 36, 0.92);
+      --panel: rgba(18, 24, 36, 0.94);
+      --panel-strong: #111827;
       --panel-border: rgba(255, 255, 255, 0.09);
       --field: #0c111b;
       --field-border: #283244;
@@ -28,7 +29,6 @@
     }
 
     html {
-      min-width: 320px;
       background: var(--bg);
     }
 
@@ -46,55 +46,89 @@
       -webkit-font-smoothing: antialiased;
     }
 
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      touch-action: manipulation;
+    }
+
     main {
       display: grid;
       min-height: 100vh;
       min-height: 100svh;
-      place-items: center;
-      padding: 24px 16px;
+      place-items: start center;
+      padding: 20px 12px 40px;
     }
 
     .calculator {
-      width: min(100%, 540px);
-      padding: clamp(24px, 6vw, 40px);
+      width: min(100%, 760px);
+      padding: clamp(20px, 5vw, 40px);
       border: 1px solid var(--panel-border);
-      border-radius: 28px;
+      border-radius: 26px;
       background: var(--panel);
       box-shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
       backdrop-filter: blur(20px);
     }
 
-    .eyebrow {
-      margin: 0 0 10px;
+    .eyebrow,
+    .section-kicker {
+      margin: 0 0 9px;
       color: var(--accent);
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 750;
       letter-spacing: 0.14em;
       text-transform: uppercase;
     }
 
+    h1,
+    h2,
+    h3,
+    p {
+      overflow-wrap: anywhere;
+    }
+
     h1 {
-      max-width: 420px;
+      max-width: 500px;
       margin: 0;
       font-size: clamp(1.75rem, 7vw, 2.55rem);
       line-height: 1.08;
       letter-spacing: -0.04em;
     }
 
+    h2 {
+      margin: 0;
+      font-size: clamp(1.15rem, 5vw, 1.4rem);
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
     .intro {
+      max-width: 600px;
       margin: 12px 0 30px;
       color: var(--muted);
       font-size: 0.95rem;
       line-height: 1.55;
     }
 
-    form {
+    form,
+    .field {
       display: grid;
+    }
+
+    form {
       gap: 20px;
     }
 
     .field {
-      display: grid;
+      min-width: 0;
       gap: 9px;
     }
 
@@ -112,10 +146,7 @@
       border: 1px solid var(--field-border);
       border-radius: 16px;
       background: var(--field);
-      transition:
-        border-color 160ms ease,
-        box-shadow 160ms ease,
-        background-color 160ms ease;
+      transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
     }
 
     .input-shell:focus-within {
@@ -150,7 +181,6 @@
       outline: 0;
       color: var(--text);
       background: transparent;
-      font: inherit;
       font-size: 1.08rem;
       font-weight: 650;
       font-variant-numeric: tabular-nums;
@@ -173,68 +203,313 @@
       appearance: none;
     }
 
-    .results {
+    .rates {
+      display: grid;
+      gap: 20px;
+    }
+
+    .term-section,
+    .period-section,
+    .summary-section {
+      margin-top: 32px;
+      padding-top: 28px;
+      border-top: 1px solid var(--panel-border);
+    }
+
+    .section-heading {
+      margin-bottom: 18px;
+    }
+
+    .section-description {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    .day-stepper {
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr) 52px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .step-button,
+    .quick-button {
+      min-width: 44px;
+      min-height: 44px;
+      border: 1px solid var(--field-border);
+      color: var(--text);
+      background: var(--field);
+      cursor: pointer;
+      transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease, transform 160ms ease;
+    }
+
+    .step-button {
+      width: 52px;
+      height: 52px;
+      padding: 0;
+      border-radius: 15px;
+      font-size: 1.45rem;
+      line-height: 1;
+    }
+
+    .step-button:hover:not(:disabled),
+    .quick-button:hover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .step-button:active:not(:disabled),
+    .quick-button:active {
+      transform: translateY(1px);
+    }
+
+    .step-button:focus-visible,
+    .quick-button:focus-visible {
+      outline: 3px solid var(--accent-soft);
+      outline-offset: 2px;
+      border-color: var(--accent);
+    }
+
+    .step-button:disabled {
+      color: #586274;
+      background: #0a0e16;
+      cursor: not-allowed;
+      opacity: 0.55;
+    }
+
+    .day-input-shell {
+      display: flex;
+      height: 52px;
+      align-items: center;
+      border: 1px solid var(--field-border);
+      border-radius: 15px;
+      background: var(--field);
+    }
+
+    .day-input-shell:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-soft);
+    }
+
+    #days {
+      height: 50px;
+      padding: 0 6px 0 12px;
+      text-align: right;
+    }
+
+    .day-unit {
+      min-width: 54px;
+      padding-right: 12px;
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 650;
+    }
+
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .quick-button {
+      padding: 9px 6px;
+      border-radius: 12px;
+      font-size: clamp(0.76rem, 3.6vw, 0.86rem);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .quick-button[aria-pressed="true"] {
+      border-color: rgba(124, 156, 255, 0.7);
+      color: #dce4ff;
+      background: var(--accent-soft);
+    }
+
+    .total-card {
+      min-width: 0;
+      padding: clamp(20px, 5vw, 28px);
+      border: 1px solid rgba(64, 223, 162, 0.28);
+      border-radius: 20px;
+      background: linear-gradient(145deg, rgba(64, 223, 162, 0.13), rgba(64, 223, 162, 0.05));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    }
+
+    .total-label {
+      display: block;
+      color: #badbd0;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .total-card output {
+      display: block;
+      width: 100%;
+      margin-top: 7px;
+      color: var(--success);
+      font-size: clamp(1.75rem, 8vw, 2.65rem);
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.045em;
+      line-height: 1.08;
+      overflow-wrap: anywhere;
+    }
+
+    .total-detail {
+      margin: 12px 0 0;
+      color: #a7b8b4;
+      font-size: 0.82rem;
+      line-height: 1.55;
+      font-variant-numeric: tabular-nums;
+      overflow-wrap: anywhere;
+    }
+
+    .breakdown {
       display: grid;
       gap: 4px;
-      margin-top: 32px;
-      padding-top: 24px;
-      border-top: 1px solid var(--panel-border);
+      margin-top: 14px;
     }
 
     .result {
       display: flex;
+      min-width: 0;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
-      padding: 15px 12px;
+      gap: 14px;
+      padding: 14px 12px;
       border-radius: 14px;
     }
 
     .result-label {
+      min-width: 0;
       color: var(--muted);
-      font-size: 0.9rem;
-      line-height: 1.3;
+      font-size: 0.88rem;
+      line-height: 1.35;
     }
 
-    output {
-      flex: 0 0 auto;
+    .result output,
+    .summary-value {
+      min-width: 0;
       color: #e7ebf2;
-      font-size: 1.08rem;
       font-weight: 750;
       font-variant-numeric: tabular-nums;
       letter-spacing: -0.02em;
+      text-align: right;
+      overflow-wrap: anywhere;
     }
 
-    .tax output {
+    .result output {
+      flex: 0 1 auto;
+      font-size: 1rem;
+    }
+
+    .result.tax output {
       color: var(--danger);
     }
 
-    .net {
-      margin-top: 8px;
-      padding: 18px 16px;
-      border: 1px solid rgba(64, 223, 162, 0.2);
+    .result.net {
+      margin-top: 5px;
+      border: 1px solid rgba(64, 223, 162, 0.16);
       background: var(--success-soft);
     }
 
-    .net .result-label {
+    .result.net .result-label {
       color: #b9d8cc;
       font-weight: 650;
     }
 
-    .net output {
+    .result.net output {
       color: var(--success);
-      font-size: clamp(1.35rem, 5vw, 1.65rem);
+      font-size: 1.12rem;
+    }
+
+    .summary-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .summary-card {
+      min-width: 0;
+      padding: 18px;
+      border: 1px solid var(--panel-border);
+      border-radius: 17px;
+      background: rgba(12, 17, 27, 0.76);
+    }
+
+    .summary-period {
+      margin: 4px 0 16px;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .summary-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, auto);
+      gap: 10px;
+      align-items: end;
+    }
+
+    .summary-row + .summary-row {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--panel-border);
+    }
+
+    .summary-label {
+      color: var(--muted);
+      font-size: 0.76rem;
+      line-height: 1.35;
+    }
+
+    .summary-value {
+      font-size: 0.92rem;
+    }
+
+    .summary-row:first-of-type .summary-value {
+      color: var(--success);
     }
 
     @media (min-width: 620px) {
       main {
-        padding: 40px 24px;
+        padding: 40px 24px 56px;
       }
 
       .rates {
-        display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 16px;
+      }
+
+      .summary-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .summary-row {
+        grid-template-columns: 1fr;
+        gap: 5px;
+        align-items: start;
+      }
+
+      .summary-value {
+        text-align: left;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .calculator {
+        border-radius: 20px;
+      }
+
+      .result {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .result output {
+        width: 100%;
+        text-align: left;
       }
     }
 
@@ -247,22 +522,23 @@
       }
     }
   </style>
-<link rel="manifest" href="/CalcularGan/manifest.webmanifest?v=30">
 
-<link rel="icon"
-      type="image/png"
-      sizes="192x192"
-      href="/CalcularGan/icono-192.png?v=30">
+  <link rel="manifest" href="/CalcularGan/manifest.webmanifest?v=30">
 
-<link rel="icon"
-      type="image/png"
-      sizes="512x512"
-      href="/CalcularGan/icono-512.png?v=30">
+  <link rel="icon"
+        type="image/png"
+        sizes="192x192"
+        href="/CalcularGan/icono-192.png?v=30">
 
-<link rel="apple-touch-icon"
-      href="/CalcularGan/icono-192.png?v=30">
+  <link rel="icon"
+        type="image/png"
+        sizes="512x512"
+        href="/CalcularGan/icono-512.png?v=30">
 
-<meta name="theme-color" content="#070b12">
+  <link rel="apple-touch-icon"
+        href="/CalcularGan/icono-192.png?v=30">
+
+  <meta name="theme-color" content="#070b12">
 </head>
 
 <body>
@@ -270,16 +546,15 @@
     <section class="calculator" aria-labelledby="page-title">
       <header>
         <p class="eyebrow">Estimador de inversión</p>
-        <h1 id="page-title">Rendimiento diario neto</h1>
+        <h1 id="page-title">Rendimiento neto por plazo</h1>
         <p class="intro">
-          Calcula la ganancia diaria estimada de tu inversión después de la retención de ISR.
+          Calcula cuánto ganarás y cuánto tendrás en total después de la retención de ISR.
         </p>
       </header>
 
       <form aria-label="Datos de inversión" autocomplete="off">
         <div class="field">
           <label for="capital">Capital</label>
-
           <div class="input-shell">
             <span class="affix prefix" aria-hidden="true">$</span>
             <input
@@ -293,16 +568,12 @@
               aria-describedby="capital-help"
             >
           </div>
-
-          <span id="capital-help" hidden>
-            Monto de la inversión en pesos mexicanos.
-          </span>
+          <span id="capital-help" hidden>Monto de la inversión en pesos mexicanos.</span>
         </div>
 
         <div class="rates">
           <div class="field">
-            <label for="annual-rate">Tasa de Rendimiento Anual</label>
-
+            <label for="annual-rate">Tasa de rendimiento anual</label>
             <div class="input-shell">
               <input
                 id="annual-rate"
@@ -318,8 +589,7 @@
           </div>
 
           <div class="field">
-            <label for="isr-rate">Tasa ISR Anual</label>
-
+            <label for="isr-rate">Tasa ISR anual</label>
             <div class="input-shell">
               <input
                 id="isr-rate"
@@ -336,25 +606,130 @@
         </div>
       </form>
 
-      <section
-        class="results"
-        aria-label="Resultados diarios"
-        aria-live="polite"
-        aria-atomic="true"
-      >
-        <div class="result">
-          <span class="result-label">Ganancia Bruta Diaria</span>
-          <output id="gross-result" for="capital annual-rate">$0.00</output>
+      <section class="term-section" aria-labelledby="term-title">
+        <div class="section-heading">
+          <p class="section-kicker">Plazo personalizado</p>
+          <h2 id="term-title">Elige de 1 a 365 días</h2>
         </div>
 
-        <div class="result tax">
-          <span class="result-label">Retención de ISR Diaria</span>
-          <output id="tax-result" for="capital isr-rate">$0.00</output>
+        <div class="day-stepper">
+          <button
+            class="step-button"
+            id="decrease-days"
+            type="button"
+            aria-label="Disminuir un día"
+          >−</button>
+
+          <label class="day-input-shell" for="days">
+            <input
+              id="days"
+              name="days"
+              type="number"
+              inputmode="numeric"
+              min="1"
+              max="365"
+              step="1"
+              value="1"
+              aria-label="Cantidad de días"
+              aria-describedby="days-help"
+            >
+            <span class="day-unit" id="day-unit" aria-hidden="true">día</span>
+          </label>
+
+          <button
+            class="step-button"
+            id="increase-days"
+            type="button"
+            aria-label="Aumentar un día"
+          >+</button>
         </div>
 
-        <div class="result net">
-          <span class="result-label">Ganancia Neta Diaria</span>
-          <output id="net-result" for="capital annual-rate isr-rate">$0.00</output>
+        <p id="days-help" class="section-description">Escribe un número entero o usa los accesos rápidos.</p>
+
+        <div class="quick-actions" aria-label="Accesos rápidos de plazo">
+          <button class="quick-button" type="button" data-days="1" aria-pressed="true">1 día</button>
+          <button class="quick-button" type="button" data-days="30" aria-pressed="false">30 días</button>
+          <button class="quick-button" type="button" data-days="365" aria-pressed="false">365 días</button>
+        </div>
+      </section>
+
+      <section class="period-section" aria-labelledby="period-title">
+        <div class="section-heading">
+          <p class="section-kicker">Resultado principal</p>
+          <h2 id="period-title">Resultado para 1 día</h2>
+        </div>
+
+        <div class="total-card" aria-live="polite" aria-atomic="true">
+          <span class="total-label">Total que tendré</span>
+          <output id="total-result" for="capital annual-rate isr-rate days">$0.00</output>
+          <p class="total-detail" id="total-detail">
+            Capital invertido: $0.00 + ganancia neta: $0.00
+          </p>
+        </div>
+
+        <div class="breakdown" aria-label="Desglose del plazo seleccionado">
+          <div class="result">
+            <span class="result-label">Ganancia bruta acumulada</span>
+            <output id="gross-period-result" for="capital annual-rate days">$0.00</output>
+          </div>
+
+          <div class="result tax">
+            <span class="result-label">Retención de ISR acumulada</span>
+            <output id="tax-period-result" for="capital isr-rate days">$0.00</output>
+          </div>
+
+          <div class="result net">
+            <span class="result-label">Ganancia neta acumulada</span>
+            <output id="net-period-result" for="capital annual-rate isr-rate days">$0.00</output>
+          </div>
+        </div>
+      </section>
+
+      <section class="summary-section" aria-labelledby="summary-title">
+        <div class="section-heading">
+          <p class="section-kicker">Comparativa</p>
+          <h2 id="summary-title">Resumen diario, mensual y anual</h2>
+        </div>
+
+        <div class="summary-grid">
+          <article class="summary-card">
+            <h3>Diario</h3>
+            <p class="summary-period">1 día</p>
+            <div class="summary-row">
+              <span class="summary-label">Ganancia neta</span>
+              <output class="summary-value" id="daily-net" for="capital annual-rate isr-rate">$0.00</output>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Total después de 1 día</span>
+              <output class="summary-value" id="daily-total" for="capital annual-rate isr-rate">$0.00</output>
+            </div>
+          </article>
+
+          <article class="summary-card">
+            <h3>Mensual</h3>
+            <p class="summary-period">30 días</p>
+            <div class="summary-row">
+              <span class="summary-label">Ganancia neta</span>
+              <output class="summary-value" id="monthly-net" for="capital annual-rate isr-rate">$0.00</output>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Total después de 30 días</span>
+              <output class="summary-value" id="monthly-total" for="capital annual-rate isr-rate">$0.00</output>
+            </div>
+          </article>
+
+          <article class="summary-card">
+            <h3>Anual</h3>
+            <p class="summary-period">365 días</p>
+            <div class="summary-row">
+              <span class="summary-label">Ganancia neta</span>
+              <output class="summary-value" id="annual-net" for="capital annual-rate isr-rate">$0.00</output>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Total después de 365 días</span>
+              <output class="summary-value" id="annual-total" for="capital annual-rate isr-rate">$0.00</output>
+            </div>
+          </article>
         </div>
       </section>
     </section>
@@ -364,13 +739,39 @@
     (() => {
       "use strict";
 
+      const MIN_DAYS = 1;
+      const MAX_DAYS = 365;
+
       const capitalInput = document.getElementById("capital");
       const annualRateInput = document.getElementById("annual-rate");
       const isrRateInput = document.getElementById("isr-rate");
+      const daysInput = document.getElementById("days");
+      const decreaseDaysButton = document.getElementById("decrease-days");
+      const increaseDaysButton = document.getElementById("increase-days");
+      const quickButtons = [...document.querySelectorAll("[data-days]")];
 
-      const grossResult = document.getElementById("gross-result");
-      const taxResult = document.getElementById("tax-result");
-      const netResult = document.getElementById("net-result");
+      const periodTitle = document.getElementById("period-title");
+      const dayUnit = document.getElementById("day-unit");
+      const grossPeriodResult = document.getElementById("gross-period-result");
+      const taxPeriodResult = document.getElementById("tax-period-result");
+      const netPeriodResult = document.getElementById("net-period-result");
+      const totalResult = document.getElementById("total-result");
+      const totalDetail = document.getElementById("total-detail");
+
+      const summaryOutputs = {
+        1: {
+          net: document.getElementById("daily-net"),
+          total: document.getElementById("daily-total")
+        },
+        30: {
+          net: document.getElementById("monthly-net"),
+          total: document.getElementById("monthly-total")
+        },
+        365: {
+          net: document.getElementById("annual-net"),
+          total: document.getElementById("annual-total")
+        }
+      };
 
       const currencyFormatter = new Intl.NumberFormat("es-MX", {
         style: "currency",
@@ -384,32 +785,132 @@
         return Number.isFinite(number) && number >= 0 ? number : 0;
       };
 
-      const formatCurrency = (value) => {
-        return currencyFormatter.format(Number.isFinite(value) ? value : 0);
+      const toFiniteNumber = (value) => Number.isFinite(value) ? value : 0;
+
+      const formatCurrency = (value) => currencyFormatter.format(toFiniteNumber(value));
+
+      const getDayLabel = (days) => `${days} ${days === 1 ? "día" : "días"}`;
+
+      const normalizeDays = (value) => {
+        const parsedDays = Number.parseInt(value, 10);
+
+        if (!Number.isFinite(parsedDays)) {
+          return MIN_DAYS;
+        }
+
+        return Math.min(MAX_DAYS, Math.max(MIN_DAYS, parsedDays));
+      };
+
+      const getInvestmentValues = () => ({
+        capital: toNonNegativeNumber(capitalInput.value),
+        annualRate: toNonNegativeNumber(annualRateInput.value),
+        isrRate: toNonNegativeNumber(isrRateInput.value)
+      });
+
+      const calculateForDays = ({ capital, annualRate, isrRate }, days) => {
+        const gananciaBrutaDiaria = (capital * (annualRate / 100)) / 360;
+        const retencionISRDiaria = (capital * (isrRate / 100)) / 365;
+        const gananciaNetaDiaria = gananciaBrutaDiaria - retencionISRDiaria;
+
+        const gananciaBrutaPeriodo = gananciaBrutaDiaria * days;
+        const retencionISRPeriodo = retencionISRDiaria * days;
+        const gananciaNetaPeriodo = gananciaBrutaPeriodo - retencionISRPeriodo;
+        const totalFinal = capital + gananciaNetaPeriodo;
+
+        return {
+          gross: toFiniteNumber(gananciaBrutaPeriodo),
+          tax: toFiniteNumber(retencionISRPeriodo),
+          net: toFiniteNumber(gananciaNetaPeriodo),
+          total: toFiniteNumber(totalFinal)
+        };
+      };
+
+      const setOutput = (output, value) => {
+        output.value = formatCurrency(value);
+      };
+
+      const updateDayControls = (days) => {
+        decreaseDaysButton.disabled = days <= MIN_DAYS;
+        increaseDaysButton.disabled = days >= MAX_DAYS;
+        dayUnit.textContent = days === 1 ? "día" : "días";
+        periodTitle.textContent = `Resultado para ${getDayLabel(days)}`;
+
+        quickButtons.forEach((button) => {
+          button.setAttribute("aria-pressed", String(Number(button.dataset.days) === days));
+        });
+      };
+
+      const updateCustomResults = (values, days) => {
+        const result = calculateForDays(values, days);
+
+        setOutput(grossPeriodResult, result.gross);
+        setOutput(taxPeriodResult, result.tax);
+        setOutput(netPeriodResult, result.net);
+        setOutput(totalResult, result.total);
+        totalDetail.textContent = `Capital invertido: ${formatCurrency(values.capital)} + ganancia neta: ${formatCurrency(result.net)}`;
+      };
+
+      const updateSummary = (values) => {
+        Object.entries(summaryOutputs).forEach(([days, outputs]) => {
+          const result = calculateForDays(values, Number(days));
+          setOutput(outputs.net, result.net);
+          setOutput(outputs.total, result.total);
+        });
       };
 
       const updateResults = () => {
-        const capital = toNonNegativeNumber(capitalInput.value);
-        const annualRate = toNonNegativeNumber(annualRateInput.value);
-        const isrRate = toNonNegativeNumber(isrRateInput.value);
+        const days = normalizeDays(daysInput.value);
+        const values = getInvestmentValues();
 
-        const grossDailyProfit = (capital * (annualRate / 100)) / 360;
-        const dailyIsrWithholding = (capital * (isrRate / 100)) / 365;
-        const netDailyProfit = grossDailyProfit - dailyIsrWithholding;
+        updateDayControls(days);
+        updateCustomResults(values, days);
+        updateSummary(values);
+      };
 
-        grossResult.value = formatCurrency(grossDailyProfit);
-        taxResult.value = formatCurrency(dailyIsrWithholding);
-        netResult.value = formatCurrency(netDailyProfit);
+      const setDays = (days) => {
+        daysInput.value = String(normalizeDays(days));
+        updateResults();
       };
 
       [capitalInput, annualRateInput, isrRateInput].forEach((input) => {
         input.addEventListener("input", updateResults);
       });
 
+      daysInput.addEventListener("input", () => {
+        if (daysInput.value === "") {
+          updateResults();
+          return;
+        }
+
+        setDays(daysInput.value);
+      });
+
+      daysInput.addEventListener("blur", () => {
+        setDays(daysInput.value);
+      });
+
+      daysInput.addEventListener("keydown", (event) => {
+        if (["e", "E", "+", "-", ".", ","].includes(event.key)) {
+          event.preventDefault();
+        }
+      });
+
+      decreaseDaysButton.addEventListener("click", () => {
+        setDays(normalizeDays(daysInput.value) - 1);
+      });
+
+      increaseDaysButton.addEventListener("click", () => {
+        setDays(normalizeDays(daysInput.value) + 1);
+      });
+
+      quickButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          setDays(button.dataset.days);
+        });
+      });
+
       updateResults();
     })();
   </script>
-  
-</script>
 </body>
 </html>
